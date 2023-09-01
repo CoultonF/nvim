@@ -34,7 +34,18 @@ return require("lazy").setup({
 			{'L3MON4D3/LuaSnip'},     -- Required
 		}
 	},
-{"nvim-treesitter/nvim-treesitter", build = ":TSUpdate"},
+	{"nvim-treesitter/nvim-treesitter", build = ":TSUpdate"},
+	'tpope/vim-dadbod',
+	{
+		"rcarriga/nvim-notify",
+		config = function()
+			require("notify").setup({
+				background_colour = "#000000",
+			})
+		end
+	},
+	'kristijanhusak/vim-dadbod-ui',
+	'kristijanhusak/vim-dadbod-completion',
 	'ThePrimeagen/harpoon',
 	"rebelot/kanagawa.nvim",
 	'mfussenegger/nvim-dap',
