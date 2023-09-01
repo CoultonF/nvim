@@ -10,3 +10,16 @@ Windows: https://www.mingw-w64.org/downloads/
 
 Install ripgrep
 https://github.com/BurntSushi/ripgrep
+
+
+Useful commands:
+
+```
+:Mason
+:TSInstall
+```
+
+
+
+
+

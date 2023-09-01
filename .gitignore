@@ -1,1 +1,2 @@
-plugin/**
+_logs
+lazy-lock.json
