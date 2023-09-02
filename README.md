@@ -3,6 +3,9 @@ Nvim config
 
 How to set up:
 
+Setup a HOME env variable to point to where you want undo trees to be saved.
+set HOME=%UserProfile%
+
 Install neovim
 
 Install Node
