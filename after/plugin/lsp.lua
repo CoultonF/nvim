@@ -4,6 +4,8 @@ lsp.preset("recommended")
 
 lsp.ensure_installed({
   'tsserver',
+  'sqlls',
+  'eslint',
 })
 
 -- Fix Undefined global 'vim'
@@ -13,16 +15,29 @@ lsp.nvim_workspace()
 local cmp = require('cmp')
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
 local cmp_mappings = lsp.defaults.cmp_mappings({
-  ['<C-k>'] = cmp.mapping.select_prev_item(cmp_select),
-  ['<C-j>'] = cmp.mapping.select_next_item(cmp_select),
-  ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  ['<S-Tab>'] = cmp.mapping.select_prev_item(cmp_select),
+  ['<Tab>'] = cmp.mapping.select_next_item(cmp_select),
+  ['<Enter>'] = cmp.mapping.confirm({ select = true }),
   ["<C-Space>"] = cmp.mapping.complete(),
 })
 
-cmp_mappings['<Tab>'] = nil
-cmp_mappings['<S-Tab>'] = nil
 
 lsp.setup_nvim_cmp({
+formatting = {
+    format = function(entry, vim_item)
+      vim_item.menu = ({
+        rg = '[Rg]',
+        buffer = '[Buffer]',
+        nvim_lsp = '[LSP]',
+        vsnip = '[Snippet]',
+        tags = '[Tag]',
+        path = '[Path]',
+        orgmode = '[Org]',
+        ['vim-dadbod-completion'] = '[DB]',
+      })[entry.source.name]
+      return vim_item
+    end,
+  },
   mapping = cmp_mappings
 })
 
@@ -52,7 +67,32 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 lsp.setup()
-
+local autocomplete_group = vim.api.nvim_create_augroup('vimrc_autocompletion', { clear = true })
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'sql', 'mysql', 'plsql' },
+  callback = function()
+    cmp.setup.buffer({ sources = { { name = 'vim-dadbod-completion' } } })
+  end,
+  group = autocomplete_group,
+})
 vim.diagnostic.config({
     virtual_text = true
 })
+vim.opt.wildignore = {
+  '*.o',
+  '*.obj,*~',
+  '*.git*',
+  '*.meteor*',
+  '*vim/backups*',
+  '*sass-cache*',
+  '*mypy_cache*',
+  '*__pycache__*',
+  '*cache*',
+  '*logs*',
+  '*node_modules*',
+  '**/node_modules/**',
+  '*DS_Store*',
+  '*.gem',
+  'log/**',
+  'tmp/**',
+}
